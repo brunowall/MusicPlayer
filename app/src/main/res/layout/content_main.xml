@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="br.ufc.quixada.musicplayer.MainActivity"
+    tools:showIn="@layout/activity_main">
+.
+    <ImageView
+        android:id="@+id/folder"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_centerHorizontal="true"
+        android:layout_margin="20dp"
+        android:src="@drawable/FolderImage"
+        />
+
+    <TextView
+        android:id="@+id/musicName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="No Music selected"
+        android:layout_below="@id/folder"
+        android:textAlignment="center"
+        android:textSize="20dp"
+        />
+    <SeekBar
+        android:id="@+id/musicProgress"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_below="@id/musicName"
+        />
+
+
+        <Button
+           android:id="@+id/buttonPrev"
+           style="@style/buttonControl"
+            android:layout_below="@id/musicProgress"
+            android:layout_alignLeft="@id/folder"
+            android:text="Prev"
+            />
+    <Button
+        android:id="@+id/buttonPlay"
+        style="@style/buttonControl"
+        android:layout_below="@id/musicProgress"
+        android:layout_alignBaseline="@id/folder"
+        android:text="Play"
+        android:layout_centerHorizontal="true"
+        />
+
+    <Button
+        android:id="@+id/buttonNext"
+        style="@style/buttonControl"
+        android:layout_alignRight="@id/folder"
+        android:layout_below="@id/musicProgress"
+        android:text="Next"
+        />
+
+
+</RelativeLayout>
