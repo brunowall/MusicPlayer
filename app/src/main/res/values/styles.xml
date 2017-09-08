@@ -9,7 +9,7 @@
     </style>
 
     <style name="AppTheme.NoActionBar">
-        <item name="windowActionBar">false</item>
+        <item name="windowActionBar">true</item>
         <item name="windowNoTitle">false</item>
     </style>
 
@@ -20,6 +20,7 @@
     <style name="buttonControl">
         <item name="android:layout_height">50dp</item>
         <item name="android:layout_width">100dp</item>
+
 
     </style>
 
