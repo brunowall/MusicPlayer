@@ -4,6 +4,7 @@ import android.content.Context;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.util.Log;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,23 +14,26 @@ import java.util.List;
  * Created by darkbyte on 07/09/17.
  */
 
-public class PlayerController implements MediaPlayer.OnPreparedListener {
+public class PlayerController implements MediaPlayer.OnCompletionListener {
     private MediaPlayer mediaPlayer;
-    private List <Uri> playlist;
+    private List <Uri> playlist; //currently playlist
+    private Context context;
+    private int numberMusic; // the music of the playlist that is playing in the time
 
-    public PlayerController(){
+
+    public PlayerController(Context context){
+        this.numberMusic = 0;
+        this.context = context;
         this.mediaPlayer = new MediaPlayer();
         this.playlist = new ArrayList<Uri>();
     }
-    //nao funciona ainda
+   //may have changes
     public void play() throws IOException {
-        for(Uri uri:playlist){
-
-            mediaPlayer.setDataSource(uri.getPath());
-            mediaPlayer.setOnPreparedListener(this);
-            mediaPlayer.prepareAsync();
+        if(!mediaPlayer.isPlaying()) {
+            mediaPlayer = MediaPlayer.create(context, playlist.get(0));
+            mediaPlayer.setOnCompletionListener(this);
+            mediaPlayer.start();
         }
-
         return;
     }
 
@@ -53,8 +57,17 @@ public class PlayerController implements MediaPlayer.OnPreparedListener {
     }
 
 
-    public void onPrepared(MediaPlayer player) {
-        player.start();
+    @Override
+    public void onCompletion(MediaPlayer mediaPlayer) {
+        try {
+            numberMusic ++;
+            if (numberMusic < playlist.size()){
+                mediaPlayer.setDataSource(this.context,playlist.get(numberMusic));
+                mediaPlayer.start();
+            }
+        } catch (IOException e) {
+            Log.d("teste", "onCompletion: teste");
+        }
     }
 
 }
