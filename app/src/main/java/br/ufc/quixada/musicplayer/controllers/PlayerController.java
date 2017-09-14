@@ -59,14 +59,10 @@ public class PlayerController implements MediaPlayer.OnCompletionListener {
 
     @Override
     public void onCompletion(MediaPlayer mediaPlayer) {
-        try {
-            numberMusic ++;
-            if (numberMusic < playlist.size()){
-                mediaPlayer.setDataSource(this.context,playlist.get(numberMusic));
-                mediaPlayer.start();
-            }
-        } catch (IOException e) {
-            Log.d("teste", "onCompletion: teste");
+        numberMusic ++;
+        if (numberMusic < playlist.size()){
+            mediaPlayer = MediaPlayer.create(context,playlist.get(numberMusic));
+            mediaPlayer.start();
         }
     }
 
