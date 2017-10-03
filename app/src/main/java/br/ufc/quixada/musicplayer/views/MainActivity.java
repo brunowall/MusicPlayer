@@ -18,28 +18,28 @@ import static android.content.ClipData.*;
 
 
 public class MainActivity extends AppCompatActivity {
-    PlayerController playerController;
+    private PlayerController playerController;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        this.playerController = new PlayerController(this);
 
+        this.playerController = new PlayerController(this);
     }
 
     public void addMusic(){
         Intent chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
         chooseFile.setType("audio/*");
         chooseFile.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
-      startActivityForResult(Intent.createChooser(chooseFile, "Choose a file") , 1);
+        startActivityForResult(Intent.createChooser(chooseFile, "Choose a file") , 1);
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
-            MenuInflater inflater = getMenuInflater();
-            inflater.inflate(R.menu.menu, menu);
-            return true;
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        return true;
     }
 
     @Override
@@ -47,21 +47,19 @@ public class MainActivity extends AppCompatActivity {
         if(resultCode == RESULT_OK && requestCode == 1){
             try {
                 ClipData cdata = data.getClipData();
-                if(cdata !=null) {
-
+                if(cdata != null)
                     for (int i = 0; i < cdata.getItemCount(); i++) {
                         Item item = cdata.getItemAt(i);
                         this.playerController.addInPlaylist(item.getUri());
                     }
-                }
-                else{
+                else
                     this.playerController.addInPlaylist(data.getData());
-                }
+
                 this.playerController.play();
 
             }catch (IOException e){
                 e.printStackTrace();
-                Log.d("erro","IOEXCEPTION");
+                Log.d("ERROR","IO_EXCEPTION in Activity Result");
             }
         }
     }

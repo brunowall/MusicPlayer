@@ -25,8 +25,9 @@ public class PlayerController implements MediaPlayer.OnCompletionListener {
         this.numberMusic = 0;
         this.context = context;
         this.mediaPlayer = new MediaPlayer();
-        this.playlist = new ArrayList<Uri>();
+        this.playlist = new ArrayList<>();
     }
+
    //may have changes
     public void play() throws IOException {
         if(!mediaPlayer.isPlaying()) {
@@ -34,7 +35,6 @@ public class PlayerController implements MediaPlayer.OnCompletionListener {
             mediaPlayer.setOnCompletionListener(this);
             mediaPlayer.start();
         }
-        return;
     }
 
     public void pause(){
