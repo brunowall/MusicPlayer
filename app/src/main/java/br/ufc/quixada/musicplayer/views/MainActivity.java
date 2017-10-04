@@ -8,17 +8,30 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.SeekBar;
+import android.widget.TextView;
 
 import java.io.IOException;
 
 import br.ufc.quixada.musicplayer.R;
 import br.ufc.quixada.musicplayer.controllers.PlayerController;
 
-import static android.content.ClipData.*;
+import static android.content.ClipData.Item;
 
 
 public class MainActivity extends AppCompatActivity {
     private PlayerController playerController;
+
+    private Button btnPlay = null;
+    private Button btnNext = null;
+    private Button btnPrev = null;
+    private SeekBar seekbarProgress = null;
+
+    private TextView txtViewName = null;
+    private ImageView imageAlbum = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +39,25 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         this.playerController = new PlayerController(this);
+
+        setReferences();
+
+        btnNext.setOnClickListener((View v) -> {
+            try {
+                playerController.next();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
+        btnPrev.setOnClickListener((View v) -> {
+            try {
+                playerController.prev();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
     }
 
     public void addMusic(){
@@ -55,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
                 else
                     this.playerController.addInPlaylist(data.getData());
 
-                this.playerController.play();
+                this.playerController.play(0);
 
             }catch (IOException e){
                 e.printStackTrace();
@@ -75,5 +107,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void setReferences() {
+        this.btnPlay = findViewById(R.id.btnPlay);
+        this.btnPrev = findViewById(R.id.btnPrev);
+        this.btnNext = findViewById(R.id.btnNext);
+        this.seekbarProgress = findViewById(R.id.progressSeekbar);
+
+        this.txtViewName = findViewById(R.id.nameTxtView);
+        this.imageAlbum = findViewById(R.id.imageAlbum);
+    }
 
 }

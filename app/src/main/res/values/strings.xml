@@ -5,4 +5,5 @@
     <string name="nextBtn">Next</string>
     <string name="prevBtn">Prev</string>
     <string name="defaultNoMusic">No Music selected</string>
+    <string name="addMusicBtn">Add Music</string>
 </resources>
