@@ -26,18 +26,21 @@ public class PlayerController implements MediaPlayer.OnCompletionListener {
         this.playlist = new ArrayList<>();
     }
 
+    public void playOrPause() {
+        if (mediaPlayer.isPlaying()) 
+            mediaPlayer.pause();
+        else 
+            mediaPlayer.start();
+    }
+
     //may have changes
     public void play(int position) throws IOException {
         if (mediaPlayer.isPlaying())
             mediaPlayer.stop();
+        mediaPlayer.reset();
         mediaPlayer = MediaPlayer.create(context, playlist.get(position));
         mediaPlayer.setOnCompletionListener(this);
         mediaPlayer.start();
-    }
-
-    public void pause(){
-        if (mediaPlayer.isPlaying())
-            mediaPlayer.pause();
     }
 
     public void next() throws IOException {
@@ -56,7 +59,20 @@ public class PlayerController implements MediaPlayer.OnCompletionListener {
     public List<Uri> getPlayList(){
         return playlist;
     }
-    
+
+
+    public int getCurrentPosition () {
+        return mediaPlayer.getCurrentPosition();
+    }
+
+    public int getDuration() {
+        return mediaPlayer.getDuration();
+    }
+
+    public void seekTo(int progress) {
+        mediaPlayer.seekTo(progress);
+    }
+
     @Override
     public void onCompletion(MediaPlayer mediaPlayer) {
         currentPosition ++;

@@ -3,6 +3,7 @@ package br.ufc.quixada.musicplayer.views;
 import android.content.ClipData;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
@@ -20,18 +21,28 @@ import br.ufc.quixada.musicplayer.R;
 import br.ufc.quixada.musicplayer.controllers.PlayerController;
 
 import static android.content.ClipData.Item;
+import static android.widget.SeekBar.*;
 
 
 public class MainActivity extends AppCompatActivity {
+    // Constants
+    private final int UPDATE_FREQUENCY = 500;
+    private final int STEP_VALUE = 4000;
+    // Booleans
+    private boolean isMoveSeekBar = false;
+    // Controllers
     private PlayerController playerController;
-
+    // Buttons
     private Button btnPlay = null;
     private Button btnNext = null;
     private Button btnPrev = null;
-    private SeekBar seekbarProgress = null;
-
+    private SeekBar seekBarProgress = null;
+    // Views
     private TextView txtViewName = null;
     private ImageView imageAlbum = null;
+    // Others
+    private final Handler handler = new Handler();
+    private final Runnable updatePositionRunnable = () -> updatePosition();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,31 +51,45 @@ public class MainActivity extends AppCompatActivity {
 
         this.playerController = new PlayerController(this);
 
-        setReferences();
+        setReferences(); // Get all the references from xml file
 
-        btnNext.setOnClickListener((View v) -> {
-            try {
-                playerController.next();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
+        btnNext.setOnClickListener(onButtonClick);
+        btnPrev.setOnClickListener(onButtonClick);
+        btnPlay.setOnClickListener(onButtonClick);
+        seekBarProgress.setOnSeekBarChangeListener(seekBarChanged);
+    }
+    
+    private void updatePosition() {
+        handler.removeCallbacks(updatePositionRunnable);
 
-        btnPrev.setOnClickListener((View v) -> {
-            try {
-                playerController.prev();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
+        seekBarProgress.setProgress(playerController.getCurrentPosition());
 
+        handler.postDelayed(updatePositionRunnable, UPDATE_FREQUENCY);
     }
 
-    public void addMusic(){
+    private View.OnClickListener onButtonClick = (View v) -> {
+        try {
+            switch (v.getId()) {
+                case R.id.btnPlay:
+                    playerController.playOrPause();
+                    updatePosition();
+                 break;
+                case R.id.btnNext: playerController.next();
+                 break;
+                case R.id.btnPrev: playerController.prev();
+                 break;
+            }   
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    };
+
+    private boolean addMusic(){
         Intent chooseFile = new Intent(Intent.ACTION_GET_CONTENT);
         chooseFile.setType("audio/*");
         chooseFile.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
         startActivityForResult(Intent.createChooser(chooseFile, "Choose a file") , 1);
+        return true;
     }
 
     @Override
@@ -76,22 +101,22 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(resultCode == RESULT_OK && requestCode == 1){
+        if (resultCode == RESULT_OK && requestCode == 1){
             try {
                 ClipData cdata = data.getClipData();
                 if(cdata != null)
-                    for (int i = 0; i < cdata.getItemCount(); i++) {
-                        Item item = cdata.getItemAt(i);
-                        this.playerController.addInPlaylist(item.getUri());
-                    }
+                    for (int i = 0; i < cdata.getItemCount(); i++)
+                        this.playerController.addInPlaylist(cdata.getItemAt(i).getUri());
                 else
                     this.playerController.addInPlaylist(data.getData());
 
                 this.playerController.play(0);
-
-            }catch (IOException e){
+                seekBarProgress.setProgress(0);
+                seekBarProgress.setMax(playerController.getDuration());
+                updatePosition();
+            } catch (IOException e){
                 e.printStackTrace();
-                Log.d("ERROR","IO_EXCEPTION in Activity Result");
+                Log.d("ERROR", "IO Exception in Activity Result");
             }
         }
     }
@@ -100,18 +125,33 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.action_add:
-                addMusic();
-                return true;
+                return addMusic();
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
 
+    private OnSeekBarChangeListener seekBarChanged = new OnSeekBarChangeListener() {
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) { isMoveSeekBar = false; }
+
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) { isMoveSeekBar = true; }
+
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+            if (isMoveSeekBar) {
+                playerController.seekTo(progress);
+                Log.i("OnSeekBarChangeListener", "onProgressChanged");
+            }
+        }
+    };
+
     private void setReferences() {
         this.btnPlay = findViewById(R.id.btnPlay);
         this.btnPrev = findViewById(R.id.btnPrev);
         this.btnNext = findViewById(R.id.btnNext);
-        this.seekbarProgress = findViewById(R.id.progressSeekbar);
+        this.seekBarProgress = findViewById(R.id.progressSeekbar);
 
         this.txtViewName = findViewById(R.id.nameTxtView);
         this.imageAlbum = findViewById(R.id.imageAlbum);
