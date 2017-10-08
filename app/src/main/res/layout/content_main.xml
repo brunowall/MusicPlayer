@@ -6,57 +6,64 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="br.ufc.quixada.musicplayer.views.MainActivity"
-    tools:showIn="@layout/activity_main">
-.
+    tools:showIn="@layout/activity_main"
+    android:padding="5dp"
+    android:layout_margin="5dp">
+
     <ImageView
         android:id="@+id/folder"
-        android:layout_width="300dp"
+        android:layout_width="match_parent"
         android:layout_height="300dp"
         android:layout_centerHorizontal="true"
         android:layout_margin="20dp"
-        android:src="@drawable/folderimage"
+        android:src="@drawable/album_image_default"
         />
 
     <TextView
         android:id="@+id/musicName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="No Music selected"
+        android:text="@string/defaultNoMusic"
         android:layout_below="@id/folder"
         android:textAlignment="center"
+        android:padding="10dp"
         android:textSize="20dp"
         />
+
     <SeekBar
         android:id="@+id/musicProgress"
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:layout_below="@id/musicName"
+        android:padding="5dp"
         />
 
+    <Button
+        android:id="@+id/buttonPrev"
+        android:layout_below="@id/musicProgress"
+        android:layout_alignLeft="@id/folder"
+        android:text="@string/prevBtn"
+        android:padding="10dp"
+        style="@style/buttonControl"
+        />
 
-        <Button
-           android:id="@+id/buttonPrev"
-           style="@style/buttonControl"
-            android:layout_below="@id/musicProgress"
-            android:layout_alignLeft="@id/folder"
-            android:text="Prev"
-            />
     <Button
         android:id="@+id/buttonPlay"
-        style="@style/buttonControl"
         android:layout_below="@id/musicProgress"
         android:layout_alignBaseline="@id/folder"
-        android:text="Play"
+        android:text="@string/playBtn"
         android:layout_centerHorizontal="true"
+        android:padding="10dp"
+        style="@style/buttonControl"
         />
 
     <Button
         android:id="@+id/buttonNext"
-        style="@style/buttonControl"
         android:layout_alignRight="@id/folder"
         android:layout_below="@id/musicProgress"
-        android:text="Next"
+        android:text="@string/nextBtn"
+        android:padding="10dp"
+        style="@style/buttonControl"
         />
-
 
 </RelativeLayout>

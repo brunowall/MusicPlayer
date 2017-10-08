@@ -1,13 +1,17 @@
 <menu xmlns:tools="http://schemas.android.com/tools"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
     <item
         android:id="@+id/action_add"
         android:icon="@android:drawable/ic_input_add"
+        android:tooltipText="@string/addMusicBtn"
+        android:iconTint="@color/colorAccent"
         android:orderInCategory="100"
+        android:title="@string/addMusicBtn"
         app:showAsAction="always"
         tools:ignore="AppCompatResource"
-        android:title="Add Music"
+
         />
 
 </menu>

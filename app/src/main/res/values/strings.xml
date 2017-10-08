@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">MusicPlayer</string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="playBtn">Play</string>
+    <string name="nextBtn">Next</string>
+    <string name="prevBtn">Prev</string>
+    <string name="defaultNoMusic">No Music selected</string>
+    <string name="addMusicBtn">Add Music</string>
 </resources>
